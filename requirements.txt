@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pyzabbix
+netmiko
+ansible
+influxdb-client 
