@@ -3,4 +3,11 @@ uvicorn
 pyzabbix
 netmiko
 ansible
-influxdb-client 
+influxdb-client
+pymongo
+grpcio
+grpcio-tools
+protobuf
+pandas
+httpx
+python-dotenv 

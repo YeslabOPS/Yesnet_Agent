@@ -4,25 +4,25 @@ import subprocess
 
 router = APIRouter()
 
-PLAYBOOKS_DIR = "../playbooks"  # Replace with your actual path
+PLAYBOOKS_DIR = "../playbooks"  # 替换为实际的路径
 
 @router.post("/")
 async def run_playbook(file: UploadFile = File(...)):
     try:
-        # Ensure the playbooks directory exists
+        # 确保 playbooks 目录存在
         os.makedirs(PLAYBOOKS_DIR, exist_ok=True)
 
-        # Save the uploaded file
+        # 保存上传的文件
         file_path = os.path.join(PLAYBOOKS_DIR, file.filename)
         with open(file_path, "wb") as f:
             f.write(await file.read())
 
-        # Execute the playbook using ansible-playbook command
+        # 使用 ansible-playbook 命令执行 playbook
         result = subprocess.run(["ansible-playbook", file_path], capture_output=True, text=True)
 
         if result.returncode != 0:
-            raise HTTPException(status_code=400, detail=f"Ansible playbook execution failed: {result.stderr}")
+            raise HTTPException(status_code=400, detail=f"Ansible playbook 执行失败: {result.stderr}")
 
-        return {"message": "Playbook executed successfully", "output": result.stdout}
+        return {"message": "Playbook 执行成功", "output": result.stdout}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) 

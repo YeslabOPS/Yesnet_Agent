@@ -33,7 +33,7 @@ class TelemetryClient(protoxemdt_grpc_dialout_pb2_grpc.gRPCMdtDialoutServicer):
         self.data_controller = DataController()
 
     def parse_telemetry_data(self, telemetry_data, device_name):
-        # Unified parsing function for telemetry data
+        # 统一解析 telemetry 数据
         metrics = {}
         for field in telemetry_data.data_gpbkv:
             if field.name == "cpu_usage":
@@ -44,20 +44,21 @@ class TelemetryClient(protoxemdt_grpc_dialout_pb2_grpc.gRPCMdtDialoutServicer):
                 metrics["Interface RX"] = field.uint64_value
             elif field.name == "interface_tx":
                 metrics["Interface TX"] = field.uint64_value
-            # Add more metrics as needed
+            # 根据需要添加更多指标
 
-        # Write each metric to InfluxDB
+        # 将每个指标写入 InfluxDB
         for metric_name, metric_value in metrics.items():
             self.data_controller.write_to_influxdb(device_name, (metric_name, metric_value))
 
     def MdtDialout(self, request_iterator, context):
+        # 处理 gRPC 请求
         for request in request_iterator:
             try:
                 telemetry_data = Telemetry()
                 telemetry_data.ParseFromString(request.data)
                 device_name = telemetry_data.node_id.node_id_str
                 if not device_name:
-                    continue  # Skip if device name is not available
+                    continue  # 如果设备名称不可用，则跳过
                 self.parse_telemetry_data(telemetry_data, device_name)
             except Exception as e:
                 print(f"Error processing telemetry data: {e}")
