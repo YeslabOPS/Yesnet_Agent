@@ -1,12 +1,12 @@
 from netmiko import ConnectHandler
 import asyncio
-from app.utils.database import DataWriter
+from app.utils.database import DataController
 
 class SSHClient():
     def __init__(self):
         self.data = {}
         self.command_loops = {}  # Dictionary to store device and their commands
-        self.data_writer = DataWriter()  # Initialize DataWriter
+        self.data_writer = DataController()  # Initialize DataWriter
 
     def conn(self, device_info):
         return ConnectHandler(**device_info)
@@ -28,12 +28,16 @@ class SSHClient():
 
     async def execute_command_loops(self, inventory):
         while True:
-            for device_name, commands in self.command_loops.items():
-                # Retrieve device information from inventory
-                device_info = inventory.get_inventory_by_name(device_name)
-                device_ip, device_type, ssh_username, ssh_password = device_info
+            if not self.command_loops:
+                await asyncio.sleep(300)  # Wait and continue if no commands are in the loop
+                continue
 
-                # Prepare device connection details
+            for device_name, commands in self.command_loops.items():
+                device_info = inventory.get_inventory_by_name(device_name)
+                if not device_info:
+                    continue  # Skip if device information is not available
+
+                device_ip, device_type, ssh_username, ssh_password = device_info
                 device_details = {
                     'device_type': device_type,
                     'ip': device_ip,
@@ -41,17 +45,11 @@ class SSHClient():
                     'password': ssh_password,
                 }
 
-                # Establish SSH connection
                 ssh_handle = self.conn(device_details)
-
-                # Execute each command
                 for command in commands:
                     self.run_command(ssh_handle, device_name, command)
 
-                # Write data to MongoDB
                 self.data_writer.write_to_mongo({device_name: self.data[device_name]})
-
-                # Disconnect after all commands are executed
                 self.disconnect(ssh_handle)
 
             await asyncio.sleep(300)  # Wait for 5 minutes

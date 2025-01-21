@@ -22,7 +22,13 @@ class ZabbixClient:
         
     def get_datas(self):
         data = {}
+        if not self.metrics:
+            return data  # Return empty data if no metrics are defined
+
         for device_name, metric_list in self.metrics.items():
+            if device_name not in self.inventory:
+                continue  # Skip if device is not in inventory
+
             data[device_name] = []
             value_list = self._get_data(device_name, metric_list)
             for index in range(len(value_list)):
