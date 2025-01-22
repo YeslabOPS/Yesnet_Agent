@@ -1,6 +1,6 @@
 from netmiko import ConnectHandler
 import asyncio
-from app.utils.database import DataController
+from ..utils.database import DataController
 
 class SSHClient():
     def __init__(self):

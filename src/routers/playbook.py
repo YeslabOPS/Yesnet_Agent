@@ -6,8 +6,13 @@ router = APIRouter()
 
 PLAYBOOKS_DIR = "../playbooks"  # 替换为实际的路径
 
-@router.post("/")
+@router.post("/", summary="运行Ansible Playbook", description="上传并运行指定的Ansible Playbook文件。")
 async def run_playbook(file: UploadFile = File(...)):
+    """
+    运行Ansible Playbook
+
+    - **file**: 要上传和执行的Ansible Playbook文件
+    """
     try:
         # 确保 playbooks 目录存在
         os.makedirs(PLAYBOOKS_DIR, exist_ok=True)

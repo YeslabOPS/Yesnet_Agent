@@ -1,13 +1,19 @@
 from fastapi import APIRouter, HTTPException, Depends
-from app.utils.ssh_client import SSHClient
-from app.utils.inventory import Inventory
+from ..utils.ssh_client import SSHClient
+from ..utils.inventory import Inventory
 
 router = APIRouter()
 ssh_client = SSHClient()
 inventory = Inventory()
 
-@router.post("/cmd")
+@router.post("/cmd", summary="执行SSH命令", description="在指定设备上通过SSH执行命令。")
 async def run_ssh_command(device_name: str, command: str):
+    """
+    执行SSH命令
+
+    - **device_name**: 设备名称
+    - **command**: 要执行的命令
+    """
     try:
         # 从设备清单中获取设备信息
         device_info = inventory.get_inventory_by_name(device_name)
@@ -31,8 +37,14 @@ async def run_ssh_command(device_name: str, command: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.post("/cmdloop")
+@router.post("/cmdloop", summary="添加SSH命令到循环", description="将命令添加到指定设备的SSH命令循环中。")
 async def run_ssh_command_loop(device_name: str, command: str):
+    """
+    添加SSH命令到循环
+
+    - **device_name**: 设备名称
+    - **command**: 要添加到循环的命令
+    """
     try:
         # 将命令添加到循环中
         ssh_client.add_command_to_loop(device_name, command)

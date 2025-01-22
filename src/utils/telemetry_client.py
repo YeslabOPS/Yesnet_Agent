@@ -1,10 +1,10 @@
 from concurrent import futures
 import time
 import grpc
-from app.proto import protoxemdt_grpc_dialout_pb2_grpc
-from app.proto import telemetry_pb2
-from app.utils.database import DataController
-from app.proto.telemetry_pb2 import Telemetry
+from ..proto import protoxemdt_grpc_dialout_pb2_grpc
+from ..proto import telemetry_pb2
+from ..utils.database import DataController
+from ..proto.telemetry_pb2 import Telemetry
 import json
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24

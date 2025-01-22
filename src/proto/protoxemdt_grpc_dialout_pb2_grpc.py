@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import protoxemdt_grpc_dialout_pb2 as protoxemdt__grpc__dialout__pb2
+from ..proto import protoxemdt_grpc_dialout_pb2 as protoxemdt__grpc__dialout__pb2
 
 
 class gRPCMdtDialoutStub(object):

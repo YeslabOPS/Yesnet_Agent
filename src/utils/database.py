@@ -15,15 +15,16 @@ mongo_uri = os.getenv("MONGODB_URI")
 
 
 class DataController:
-    def __init__(self):
-        # 初始化 InfluxDB 客户端
-        self.influx_client = influxdb_client.InfluxDBClient(url=influx_server, token=influx_token, org=influx_org)
-        self.api_writer = self.influx_client.write_api(write_options=SYNCHRONOUS)
+    def __init__(self, running=False):
+        if running:
+            # 初始化 InfluxDB 客户端
+            self.influx_client = influxdb_client.InfluxDBClient(url=influx_server, token=influx_token, org=influx_org)
+            self.api_writer = self.influx_client.write_api(write_options=SYNCHRONOUS)
 
-        # 初始化 MongoDB 连接
-        self.mongo_client = MongoClient(mongo_uri)
-        self.mongo_db = self.mongo_client[os.getenv("MONGODB_DB")]
-        self.mongo_collection = self.mongo_db[os.getenv("MONGODB_COLLECTION")]
+            # 初始化 MongoDB 连接
+            self.mongo_client = MongoClient(mongo_uri)
+            self.mongo_db = self.mongo_client[os.getenv("MONGODB_DB")]
+            self.mongo_collection = self.mongo_db[os.getenv("MONGODB_COLLECTION")]
 
     def write_to_influxdb(self, pname, field_tup):
         # 将数据写入 InfluxDB

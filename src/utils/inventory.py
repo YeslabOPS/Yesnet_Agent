@@ -7,9 +7,10 @@ minio_bucket = os.getenv("MINIO_BUCKET")
 minio_inventory_file = os.getenv("MINIO_INVENTORY_FILE")
 
 class Inventory:
-    def __init__(self):
-        # 从 MinIO 服务器加载设备清单
-        self.inventory = pd.read_excel(f'{minio_url}/{minio_bucket}/{minio_inventory_file}')
+    def __init__(self, running=False):
+        if running:
+            # 从 MinIO 服务器加载设备清单
+            self.inventory = pd.read_excel(f'{minio_url}/{minio_bucket}/{minio_inventory_file}')
 
     def get_inventory(self):
         # 返回完整的设备清单

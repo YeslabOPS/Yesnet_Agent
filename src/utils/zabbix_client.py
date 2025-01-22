@@ -1,14 +1,14 @@
-import json
 from pyzabbix.api import ZabbixAPI
 
 class ZabbixClient:
-    def __init__(self, zabbix_url, token):
-        # 创建 ZabbixAPI 类实例
-        self.zapi = ZabbixAPI(server=zabbix_url)
-        self.zapi.login(api_token=token)
-        # 获取监控的主机清单
-        self.inventory = {host['host']: host['hostid'] for host in self.zapi.host.get(monitored_hosts=1, output='extend')}
-        self.metrics = {} # 设备名: 监控指标列表，例如：{'cisco_core': ['Cisco IOS: ICMP ping', 'Cisco IOS: ICMP loss', 'Cisco IOS: ICMP response time']}
+    def __init__(self, zabbix_url, token, running=False):
+        if running:
+            # 创建 ZabbixAPI 类实例
+            self.zapi = ZabbixAPI(server=zabbix_url)
+            self.zapi.login(api_token=token)
+            # 获取监控的主机清单
+            self.inventory = {host['host']: host['hostid'] for host in self.zapi.host.get(monitored_hosts=1, output='extend')}
+            self.metrics = {} # 设备名: 监控指标列表，例如：{'cisco_core': ['Cisco IOS: ICMP ping', 'Cisco IOS: ICMP loss', 'Cisco IOS: ICMP response time']}
 
     def get_metrics(self):
         # 返回当前的监控指标

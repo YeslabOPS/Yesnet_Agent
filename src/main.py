@@ -2,9 +2,9 @@ import os
 import asyncio
 import httpx
 from fastapi import FastAPI
-from app.routers import zabbix, ssh, playbook, telemetry
-from app.utils.zabbix_client import ZabbixClient
-from app.utils.telemetry_client import serve  # 导入 serve 函数
+from .routers import zabbix, ssh, playbook, telemetry
+from .utils.zabbix_client import ZabbixClient
+from .utils.telemetry_client import serve
 from contextlib import asynccontextmanager
 
 app = FastAPI()
@@ -17,7 +17,7 @@ zabbix_token = os.getenv("ZABBIX_TOKEN")
 zabbix_client = ZabbixClient(zabbix_url=zabbix_url, token=zabbix_token)
 
 # 将 zabbix_client 实例传递给 zabbix 路由
-app.include_router(zabbix.router, prefix="/api/zabbix", tags=["Zabbix"], dependencies=[zabbix_client])
+app.include_router(zabbix.router, prefix="/api/zabbix", tags=["Zabbix"])
 app.include_router(ssh.router, prefix="/api/ssh", tags=["SSH"])
 app.include_router(playbook.router, prefix="/api/playbook", tags=["Playbook"])
 app.include_router(telemetry.router, prefix="/api/telemetry", tags=["Telemetry"])
@@ -51,4 +51,11 @@ async def lifespan(app: FastAPI):
     task2.cancel()
     grpc_task.cancel()
 
-app = FastAPI(lifespan=lifespan) 
+#app = FastAPI(lifespan=lifespan)
+
+# router = APIRouter()
+
+# @router.post("/metrics")
+# async def add_zabbix_metric(device_name: str, metric_name: str):
+#     # Your implementation here
+#     return {"message": "Metric added"} 
