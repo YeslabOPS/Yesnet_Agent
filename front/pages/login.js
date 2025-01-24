@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import styles from '../styles/Login.module.css';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -16,21 +17,25 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <h1>登录</h1>
-      <input
-        type="text"
-        placeholder="用户名"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="密码"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>登录</button>
+    <div className={styles.container}>
+      <div className={styles.loginBox}>
+        <h1>登录</h1>
+        <input
+          type="text"
+          placeholder="用户名"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className={styles.input}
+        />
+        <input
+          type="password"
+          placeholder="密码"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className={styles.input}
+        />
+        <button onClick={handleLogin} className={styles.button}>登录</button>
+      </div>
     </div>
   );
 } 

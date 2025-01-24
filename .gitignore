@@ -4,6 +4,9 @@ src/**/__pycache__/
 # 忽略 VSCode 的计数器文件
 .VSCodeCounter/
 
+# 忽略 front 的 node_modules
+front/node_modules
+
 # 忽略所有的 .pyc 文件
 *.pyc
 
