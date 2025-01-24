@@ -1,0 +1,13 @@
+# 忽略所有的 __pycache__ 文件夹
+src/**/__pycache__/
+
+# 忽略 VSCode 的计数器文件
+.VSCodeCounter/
+
+# 忽略所有的 .pyc 文件
+*.pyc
+
+# 其他可能的忽略项
+.DS_Store
+*.log
+*.tmp 
